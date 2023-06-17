@@ -53,7 +53,7 @@ const Profiles = () => {
     // Perform actions or logic on page load
     try {
             
-            const res =  fetch("http://localhost:7199/api/Profile", {
+            const res =  fetch("http://localhost:7199/api/Profile/DTO", {
               method: "GET",
               headers: {
                       'Accept': 'application/json',
@@ -84,15 +84,20 @@ const Profiles = () => {
          
   };
 
-
   const columns = [
-    { title: "FullName", field: "fullName" },
-    { title: "MotherName", field: "motherName"},
-    { title: "DateOfBirth", field: "dateOfBirth"},
-    { title: "Gender", field: "gender"},
-    { title: "Nationality", field: "profile.nationality.nationality1"},
-    { title: "Photos", field: ""},
-    { title: "WarrantStatus", field: ""}
+    { title: "Full name", field: "fullName" },
+    { title: "Mother name", field: "motherName"},
+    { title: "Date of birth", field: "dateOfBirth"},
+    { title: "Gender", field: "gender.gender1"},
+    { title: "Nationality", field: "nationality.nationality1"},
+    { title: "Count of warrants", field: "countOfWarrants" },
+    { title: "Warrant status", render: rowData => rowData.countOfWarrants > 0 ?"Wanted": "Nothing" },
+    { title: "test", render: (rowData) =>
+    rowData && (
+      <button
+        color="secondary">
+      </button>
+    )}
   ];
 
 
