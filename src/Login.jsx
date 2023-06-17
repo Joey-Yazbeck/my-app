@@ -50,9 +50,11 @@ function Login() {
             //setOutput(respData.email);
 
           });
-          navigate('/SignUp');
+          navigate('/Menu');
+          
         }
         else {
+          navigate('/SignUp');
           console.log('failure');
           console.log(response);
         }
@@ -64,7 +66,7 @@ function Login() {
   };
 
   return (
-
+    
     <MDBContainer fluid>
       <MDBRow>
 
@@ -84,15 +86,15 @@ function Login() {
             <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Username' id='formControlLg' type='email' size="lg" value={user} 
           onChange={(event) =>
             setUsername(event.target.value)
-          } />
+          }  />
             <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Password' id='formControlLg' type='password' size="lg" value={pass}
           onChange={(event) => {
             setPassword(event.target.value);
           }}/>  
           {/* <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Password' id='formControlLg' type='password' size="lg" value={output}/>           */}
             <MDBBtn className="mb-4 px-5 mx-5 w-100" color='info' size='lg' type='submit' onClick={handleSubmit}>Login</MDBBtn>
-            <p className="small mb-5 pb-lg-3 ms-5"><a class="text-muted" href="#!">Forgot password?</a></p>
-            <p className='ms-5'>Don't have an account? <a href="http://localhost:3000/SignUp" class="link-info">Register here</a></p>
+            <p className="small mb-5 pb-lg-3 ms-5"><a className="text-muted" href="#!">Forgot password?</a></p>
+            <p className='ms-5'>Don't have an account? <a href="http://localhost:3000/SignUp" className="link-info">Register here</a></p>
 
           </div>
 

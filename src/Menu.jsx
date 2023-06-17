@@ -30,9 +30,7 @@ export default function Menu() {
           <MDBCollapse show={showBasic}>
             <MDBNavbarNav right className='mb-2 mb-lg-0'>
               <MDBNavbarItem active>
-                <MDBNavbarLink aria-current='page' href='#'>
-                  Home
-                </MDBNavbarLink>
+                <MDBNavbarLink aria-current='page' href='#'>Home</MDBNavbarLink>
               </MDBNavbarItem>
               <MDBNavbarItem>
                 <MDBNavbarLink href='#'>Features</MDBNavbarLink>

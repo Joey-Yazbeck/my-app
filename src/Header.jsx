@@ -15,9 +15,17 @@ import {
   MDBDropdownItem,
   MDBCollapse,
 } from 'mdb-react-ui-kit';
+import { useEffect } from 'react';
+
 
 export default function Header() {
-  const [showBasic, setShowBasic] = useState(false);
+  const [showBasic, setShowBasic] = useState(true);
+
+  useEffect(() => {
+    console.log(showBasic);
+    setShowBasic(true);
+    console.log(showBasic);
+    },[]);
 
   return (
     <MDBNavbar expand='lg' light bgColor='light'>

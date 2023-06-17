@@ -14,6 +14,8 @@ import Search from './Search';
 import App from './Targets';
 import DataTable from './Table2';
 import Profiles from './Profiles';
+import { BsFillArrowRightCircleFill } from "react-icons/fa";
+
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
