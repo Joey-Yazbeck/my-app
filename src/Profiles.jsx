@@ -16,6 +16,7 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
+import FrontCircleArrow from './FrontCircleArrow'
 import { MDBBadge} from 'mdb-react-ui-kit';
   
 
@@ -92,14 +93,11 @@ const Profiles = () => {
     { title: "Nationality", field: "nationality.nationality1"},
     { title: "Count of warrants", field: "countOfWarrants" },
     { title: "Warrant status", render: rowData => rowData.countOfWarrants > 0 ?"Wanted": "Nothing" },
-    { title: "test", render: (rowData) =>
+    { title: "Add To Targets", render: (rowData) =>
     rowData && (
-      <button
-        color="secondary">
-      </button>
+      <FrontCircleArrow profileId = {rowData.profileId}/>
     )}
   ];
-
 
   const [data, setData] = useState([]);
 
