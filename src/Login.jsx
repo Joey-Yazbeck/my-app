@@ -1,7 +1,7 @@
 import React,{ useState }  from 'react';
-import './Login.css';
+import './css/Login.css';
 import { useNavigate } from 'react-router-dom';
-import logo from './Swat_Logo.svg';
+import logo from './images/Swat_Logo.svg';
 
 
 import {
@@ -50,10 +50,11 @@ function Login() {
             //setOutput(respData.email);
 
           });
-          navigate('/Menu');
+          navigate('/Profiles');
           
         }
         else {
+          //change to popup error alert
           navigate('/SignUp');
           console.log('failure');
           console.log(response);
