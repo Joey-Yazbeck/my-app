@@ -17,7 +17,8 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import FrontCircleArrow from './FrontCircleArrow'
-import { MDBBadge} from 'mdb-react-ui-kit';
+import ActionMenu from "./ActionMenu";
+
   
 
 const tableIcons = {
@@ -85,20 +86,42 @@ const Profiles = () => {
          
   };
 
-  const columns = [
-    { title: "Full name", field: "fullName" },
-    { title: "Mother name", field: "motherName"},
-    { title: "Date of birth", field: "dateOfBirth"},
-    { title: "Gender", field: "gender.gender1"},
-    { title: "Nationality", field: "nationality.nationality1"},
-    { title: "Count of warrants", field: "countOfWarrants" },
-    { title: "Warrant status", render: rowData => rowData.countOfWarrants > 0 ?"Wanted": "Nothing" },
-    { title: "Add To Targets", render: (rowData) =>
-    rowData && (
-      <FrontCircleArrow profileId = {rowData.profileId}/>
-    )}
-  ];
+ 
 
+  const nationalities = [
+    { id: 1, name: "Lebanese" },
+    { id: 2, name: "Belgian" }
+  ];
+  const genders = [
+    { id: 1, name: "Male" },
+    { id: 2, name: "Female" }
+  ];
+ 
+  
+    var objNationalities = nationalities.reduce(function(acc, cur) {
+      acc[cur.id] = cur.name;  
+      return acc;
+    }, {});
+    var objGenders =  genders.reduce(function(acc, cur) {
+      acc[cur.id] = cur.name;
+      return acc;
+    }, {});
+   
+    const columns = [
+      { title: "Full name", field: "fullName" , filterPlaceholder: "Filter by name"},
+      { title: "Mother name", field: "motherName",  filterPlaceholder: "Filter by mother name"},
+      { title: "Date of birth", field: "dateOfBirth",  filterPlaceholder: "Filter by DOB"},
+      { title: "Gender", field: "gender.genderId",  filterPlaceholder: "Filter by Gender", lookup:objGenders},
+      { title: "Nationality", field: "nationality.nationalityId", filterPlaceholder: "Filter by nationality", lookup:objNationalities},
+      { title: "Count of warrants", field: "countOfWarrants",filterPlaceholder: "Count of warrants" },
+      { title: "Warrant status", render: rowData => rowData.countOfWarrants > 0 ?"Wanted": "Nothing",filterPlaceholder: "Warrant status" },
+      { title: "", render: (rowData) =>
+      // rowData && (
+        // <FrontCircleArrow profileId = {rowData.profileId}/>
+        <ActionMenu />
+      //)
+    }
+    ];
   const [data, setData] = useState([]);
 
   return (
@@ -108,7 +131,11 @@ const Profiles = () => {
         title="Profiles"
         icons={tableIcons}
         columns={columns}
+        // components={{
+        //   Action: (props) => <ActionMenu />
+        // }}
         data={data}
+        options={{exportButton:true, filtering:true}}
         editable={{
           onRowAdd: (newData) =>
             new Promise((resolve, reject) => {
