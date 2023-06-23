@@ -1,7 +1,7 @@
 import React from 'react';
 import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
-import Search from './Search';
+
 
 export default function Target() {
   return (
