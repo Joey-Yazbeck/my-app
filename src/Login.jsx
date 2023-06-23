@@ -50,7 +50,7 @@ function Login() {
             //setOutput(respData.email);
 
           });
-          navigate('/Profiles');
+          navigate('/Menu');
           
         }
         else {

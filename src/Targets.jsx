@@ -17,6 +17,7 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import { MDBBadge} from 'mdb-react-ui-kit';
+import Header from './testContent/Header'
   
 
 const tableIcons = {
@@ -100,7 +101,7 @@ const App = () => {
 
   return (
     <>
-      
+      <Header/>
       <MaterialTable
         title="Targets"
         icons={tableIcons}
@@ -140,6 +141,7 @@ const App = () => {
             
         }}
       />
+      
     </>
   );
 };

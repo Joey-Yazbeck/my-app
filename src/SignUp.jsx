@@ -7,6 +7,7 @@ import {
   MDBBtn,
   MDBCheckbox
 } from 'mdb-react-ui-kit';
+import Header from './testContent/Header'
 
 export default function App() {
   const [formValue, setFormValue] = useState({
@@ -25,8 +26,8 @@ export default function App() {
   
 
   return  (
-    <div style={{ position: 'absolute', top: 20, left: 20, right: 20 }}>
-
+    <div style={{ position: 'absolute', top: 0, left: 20, right: 20 }}>
+    <Header/>
       <h1>Add Account</h1>
 
     <MDBValidation className='row g-3'>
@@ -89,6 +90,7 @@ export default function App() {
       </div>
     </MDBValidation>
     </div>
+    
     ) ;
     
 };

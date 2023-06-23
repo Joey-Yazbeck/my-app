@@ -16,21 +16,20 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import FrontCircleArrow from './FrontCircleArrow'
-import ActionMenu from "./ActionMenu";
-
+import { MDBBadge} from 'mdb-react-ui-kit';
+import Header from './testContent/Header'
   
 
 const tableIcons = {
-  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-  
+//   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+   Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+   Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+   Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+
   DetailPanel: forwardRef((props, ref) => (
     <ChevronRight {...props} ref={ref} />
   )),
-  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+//   Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
   Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
   Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
   FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
@@ -46,7 +45,7 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const Profiles = () => {
+const Suspects = () => {
   useEffect(() => {
     // Function to be called on page load
     myFunction();
@@ -55,7 +54,8 @@ const Profiles = () => {
     // Perform actions or logic on page load
     try {
             
-            const res =  fetch("http://localhost:7199/api/Profile/DTO", {
+            const res =  fetch("http://localhost:7199/api/Suspect", 
+            {
               method: "GET",
               headers: {
                       'Accept': 'application/json',
@@ -86,76 +86,46 @@ const Profiles = () => {
          
   };
 
- 
 
-  const nationalities = [
-    { id: 1, name: "Lebanese" },
-    { id: 2, name: "Belgian" }
+  const columns = [
+    { title: "Photo", field: "photoId" },
+    { title: "Capture Date", field: "captureDate"},
+    { title: "Camera Type", field: "camera.CameraType"},
+    { title: "Camera Location", field: 'Beirut'},
+    
   ];
-  const genders = [
-    { id: 1, name: "Male" },
-    { id: 2, name: "Female" }
-  ];
- 
-  
-    var objNationalities = nationalities.reduce(function(acc, cur) {
-      acc[cur.id] = cur.name;  
-      return acc;
-    }, {});
-    var objGenders =  genders.reduce(function(acc, cur) {
-      acc[cur.id] = cur.name;
-      return acc;
-    }, {});
-   
-    const columns = [
-      { title: "Full name", field: "fullName" , filterPlaceholder: "name"},
-      { title: "Mother name", field: "motherName",  filterPlaceholder: "mother name"},
-      { title: "Date of birth", field: "dateOfBirth",  filterPlaceholder: "DOB"},
-      { title: "Gender", field: "gender.genderId",  filterPlaceholder: "Gender", lookup:objGenders},
-      { title: "Nationality", field: "nationality.nationalityId", filterPlaceholder: "Nationality", lookup:objNationalities},
-      { title: "Count of warrants", field: "countOfWarrants",filterPlaceholder: "Count of warrants" },
-      { title: "Warrant status", render: rowData => rowData.countOfWarrants > 0 ?"Wanted": "Nothing",filterPlaceholder: "Warrant status" },
-      { title: "", render: (rowData) =>
-      // rowData && (
-        // <FrontCircleArrow profileId = {rowData.profileId}/>
-        <ActionMenu />
-      //)
-    }
-    ];
+
+
   const [data, setData] = useState([]);
 
   return (
     <>
-      
+      <Header/>
       <MaterialTable
-        title="Profiles"
+        title="Suspects"
         icons={tableIcons}
         columns={columns}
-        // components={{
-        //   Action: (props) => <ActionMenu />
-        // }}
         data={data}
-        options={{exportButton:true, filtering:true}}
         editable={{
-          onRowAdd: (newData) =>
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                setData([...data, newData]);
+        //   onRowAdd: (newData) =>
+        //     new Promise((resolve, reject) => {
+        //       setTimeout(() => {
+        //         setData([...data, newData]);
 
-                resolve();
-              }, 1000);
-            }),
-          onRowUpdate: (newData, oldData) =>
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                const dataUpdate = [...data];
-                const index = oldData.tableData.id;
-                dataUpdate[index] = newData;
-                setData([...dataUpdate]);
+        //         resolve();
+        //       }, 1000);
+        //     }),
+        //   onRowUpdate: (newData, oldData) =>
+        //     new Promise((resolve, reject) => {
+        //       setTimeout(() => {
+        //         const dataUpdate = [...data];
+        //         const index = oldData.tableData.id;
+        //         dataUpdate[index] = newData;
+        //         setData([...dataUpdate]);
 
-                resolve();
-              }, 1000);
-            }),
+        //         resolve();
+        //       }, 1000);
+        //     }),
           onRowDelete: (oldData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
@@ -174,4 +144,4 @@ const Profiles = () => {
   );
 };
 
-export default Profiles;
+export default Suspects;

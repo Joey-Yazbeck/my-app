@@ -15,6 +15,8 @@ import App from './Targets';
 import DataTable from './testContent/Table2';
 import Profiles from './Profiles';
 import { BsFillArrowRightCircleFill } from "react-icons/fa";
+import Suspects from './Suspects';
+import Keyword from './Keywords';
 
 
 
@@ -28,12 +30,13 @@ root.render(
       <Route path="/SignUp"  element={<SignUp />}  />
       <Route path="/Targets"  element={<App />}/>
       <Route path="/Profiles"  element={<Profiles />}/>
+      <Route path="/Suspects"  element={<Suspects />}/>
       {/* test content */}
       <Route path="/Target"  element={<Target />}/>
       <Route path="/Menu"  element={<Menu />}/>
       <Route path="/Header"  element={<Header />}/>
       <Route path="/Table2"  element={<DataTable />}/>
-      <Route path="/Search"  element={<Search />}/>
+      <Route path="/Keyword"  element={<Keyword />}/>
     </Routes>
   </Router>
 
