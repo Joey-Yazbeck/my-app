@@ -18,6 +18,7 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import FrontCircleArrow from './FrontCircleArrow'
 import ActionMenu from "./ActionMenu";
+import moment from "moment";
 
   
 
@@ -47,11 +48,19 @@ const tableIcons = {
 };
 
 const Profiles = () => {
+  const [profiles, setProfiles] = useState([]);
+  
+  const [nationalities, setNationalities] = useState([]); 
+  const [genders, setGenders] = useState([]); 
+  const [familyStatus, setFamilyStatus] = useState([]); 
   useEffect(() => {
     // Function to be called on page load
-    myFunction();
+    getProfilesDTO();
+    getNationalities();
+    getGenders(); 
+    getFamilyStatus();    
   }, []);
-  const myFunction = () => {
+  const getProfilesDTO = () => {
     // Perform actions or logic on page load
     try {
             
@@ -68,14 +77,13 @@ const Profiles = () => {
                 response.json().then(respData => {
                   console.log(respData);
                   console.log(JSON.stringify(respData));
-                  //console.log(respData.firstName);
-                  setData(respData);
+                  setProfiles(respData);
                      
                 });
               
               }
               else {
-                console.log('failure');
+                console.log('failure getting profile');
                 console.log(response);
               }
             });
@@ -85,35 +93,200 @@ const Profiles = () => {
           }
          
   };
+  const getGenders = () => {
+    // Perform actions or logic on page load
+    try {
+            
+            const res =  fetch("http://localhost:7199/api/Gender", {
+              method: "GET",
+              headers: {
+                      'Accept': 'application/json',
+                  },
+            }).then(response => {
+              if (response.ok) {
+                
+                console.log('success');
+                
+                response.json().then(respData => {
+                  console.log(respData);
+                  console.log(JSON.stringify(respData));
+                  setGenders(respData);
+                     
+                });
+              
+              }
+              else {
+                console.log('failure getting genders');
+                console.log(response);
+              }
+            });
+            
+          } catch (err) {
+            console.log(err);
+          }
+         
+  };
+  const getNationalities = () => {
+    // Perform actions or logic on page load
+    try {
+            
+            const res =  fetch("http://localhost:7199/api/Nationality", {
+              method: "GET",
+              headers: {
+                      'Accept': 'application/json',
+                  },
+            }).then(response => {
+              if (response.ok) {
+                
+                console.log('success');
+                
+                response.json().then(respData => {
+                  console.log(respData);
+                  console.log(JSON.stringify(respData));
+                  setNationalities(respData);
+                     
+                });
+              
+              }
+              else {
+                console.log('failure getting genders');
+                console.log(response);
+              }
+            });
+            
+          } catch (err) {
+            console.log(err);
+          }
+         
+  };
+  const getFamilyStatus = () => {
+    // Perform actions or logic on page load
+    try {
+            
+            const res =  fetch("http://localhost:7199/api/FamilyStatus", {
+              method: "GET",
+              headers: {
+                      'Accept': 'application/json',
+                  },
+            }).then(response => {
+              if (response.ok) {
+                
+                console.log('success');
+                
+                response.json().then(respData => {
+                  console.log(respData);
+                  console.log(JSON.stringify(respData));
+                  setFamilyStatus(respData);
+                     
+                });
+              
+              }
+              else {
+                console.log('failure getting genders');
+                console.log(response);
+              }
+            });
+            
+          } catch (err) {
+            console.log(err);
+          }
+         
+  };
+  const addProfile = (data) => {
+    try {
 
- 
+      const res =  fetch("http://localhost:7199/api/Profile", {
+        method: "POST",
+        headers: {
+                'Accept': 'application/json',
+                'Content-Type':'application/json'
+            },
+        body: JSON.stringify(data)
+      }).then(response => {
+        if (response.ok) {
+          console.log('success', response);
+        }
+        else {
+          console.log(response);
+        }
+      });
+      
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const updateProfile = (data) => {
+    try {
 
-  const nationalities = [
-    { id: 1, name: "Lebanese" },
-    { id: 2, name: "Belgian" }
-  ];
-  const genders = [
-    { id: 1, name: "Male" },
-    { id: 2, name: "Female" }
-  ];
+      const res =  fetch("http://localhost:7199/api/Profile", {
+        method: "PUT",
+        headers: {
+                'Accept': 'application/json',
+                'Content-Type':'application/json'
+            },
+        body: JSON.stringify(data)
+      }).then(response => {
+        if (response.ok) {
+          console.log('success', response);
+        }
+        else {
+          console.log(response);
+        }
+      });
+      
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const deleteProfile = (data) => {
+    try {
+
+      const res =  fetch("http://localhost:7199/api/Profile/" + data.profileId , {
+        method: "Delete",
+        headers: {
+                'Accept': 'application/json',
+                'Content-Type':'application/json'
+            },
+        body: JSON.stringify(data)
+      }).then(response => {
+        if (response.ok) {
+          console.log('success', response);
+        }
+        else {
+          console.log(response);
+        }
+      });
+      
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+
+
  
   
     var objNationalities = nationalities.reduce(function(acc, cur) {
-      acc[cur.id] = cur.name;  
+      acc[cur.nationalityId] = cur.nationality1;  
       return acc;
     }, {});
     var objGenders =  genders.reduce(function(acc, cur) {
-      acc[cur.id] = cur.name;
+      acc[cur.genderId] = cur.gender1;  
+      return acc;
+    }, {});
+    var objFamilyStatus =  familyStatus.reduce(function(acc, cur) {
+      acc[cur.familyStatusId] = cur.familyStatus1;  
       return acc;
     }, {});
    
     const columns = [
       { title: "Full name", field: "fullName" , filterPlaceholder: "name"},
       { title: "Mother name", field: "motherName",  filterPlaceholder: "mother name"},
-      { title: "Date of birth", field: "dateOfBirth",  filterPlaceholder: "DOB"},
+      { title: "Date of birth", field: "dateOfBirth",  filterPlaceholder: "DOB",type: "date"},
       { title: "Gender", field: "gender.genderId",  filterPlaceholder: "Gender", lookup:objGenders},
       { title: "Nationality", field: "nationality.nationalityId", filterPlaceholder: "Nationality", lookup:objNationalities},
-      { title: "Count of warrants", field: "countOfWarrants",filterPlaceholder: "Count of warrants" },
+      { title: "Family Status", field: "familyStatus.familyStatusId", filterPlaceholder: "Family Status", lookup:objFamilyStatus},
+      { title: "Count of warrants", field: "countOfWarrants",filterPlaceholder: "Count of warrants" ,editable: 'never'},
       { title: "Warrant status", render: rowData => rowData.countOfWarrants > 0 ?"Wanted": "Nothing",filterPlaceholder: "Warrant status" },
       { title: "", render: (rowData) =>
       // rowData && (
@@ -122,7 +295,7 @@ const Profiles = () => {
       //)
     }
     ];
-  const [data, setData] = useState([]);
+  
 
   return (
     <>
@@ -134,39 +307,50 @@ const Profiles = () => {
         // components={{
         //   Action: (props) => <ActionMenu />
         // }}
-        data={data}
+        data={profiles}
         options={{exportButton:true, filtering:true}}
         editable={{
           onRowAdd: (newData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
-                setData([...data, newData]);
-
+                let formattedDate = moment(newData.dateOfBirth).format('YYYY-MM-DD');
+                let newProfile = {
+                  fullName : newData.fullName,
+                  motherName : newData.motherName,
+                  dateOfBirth : formattedDate,
+                  genderId: parseInt(newData.gender.genderId),
+                  nationalityId: parseInt(newData.nationality.nationalityId),
+                  familyStatusId: parseInt(newData.familyStatus.familyStatusId)
+                }                
+                console.log(JSON.stringify(newProfile));
+                addProfile(newProfile);
+                getProfilesDTO();
                 resolve();
               }, 1000);
             }),
-          onRowUpdate: (newData, oldData) =>
+          onRowUpdate: (newData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
-                const dataUpdate = [...data];
-                const index = oldData.tableData.id;
-                dataUpdate[index] = newData;
-                setData([...dataUpdate]);
-
+                console.log(JSON.stringify(newData));                
+                // const dataUpdate = [...profiles];
+                // const index = oldData.tableData.id;
+                // dataUpdate[index] = newData;
+                // setProfiles([...dataUpdate]);
+                updateProfile(newData);
+                getProfilesDTO();
                 resolve();
               }, 1000);
             }),
           onRowDelete: (oldData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
-                const dataDelete = [...data];
-                const index = oldData.tableData.id;
-                dataDelete.splice(index, 1);
-                setData([...dataDelete]);
+                console.log(JSON.stringify(oldData));
+                deleteProfile(oldData);
+                getProfilesDTO();
 
                 resolve();
               }, 1000);
-            }),
+            })
             
         }}
       />
