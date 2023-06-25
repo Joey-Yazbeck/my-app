@@ -19,6 +19,9 @@ import ViewColumn from "@material-ui/icons/ViewColumn";
 import { MDBBadge} from 'mdb-react-ui-kit';
 import Header from './testContent/Header'
   
+const [isPhotoView, setIsPhotoView] = useState(false);
+const [Photo, setPhoto] = useState(false);
+
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -92,12 +95,20 @@ const App = () => {
     { title: "DateOfBirth", field: "profile.dateOfBirth"},
     { title: "Gender", field: "profile.gender.gender1"},
     { title: "Nationality", field: "profile.nationality.nationality1"},
-    { title: "Photos", field: ""},
+    { title: "Photos",  render: (rowData) =>
+    rowData && (
+      <button onClick={openPhotoModal} style={{border : 'none', backgroundColor: 'white', color:'blue', textDecorationLine:'underline' }}>View</button>
+    )
+  },
     { title: "WarrantStatus", field: ""}
   ];
 
 
   const [data, setData] = useState([]);
+
+  const openPhotoModal = () => {
+    setIsPhotoView(true);
+  }
 
   return (
     <>

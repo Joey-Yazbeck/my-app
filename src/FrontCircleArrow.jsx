@@ -6,7 +6,7 @@ export default function ArrowFrontCircle(props)  {
   const inputRef = useRef(null);
 
   const handleClick = () => {
-    inputRef.current.click();
+    inputRef.crurent.click();
   };
 
   const handleFileChange = event => {
