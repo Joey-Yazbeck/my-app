@@ -1,5 +1,6 @@
 import React, { useState, forwardRef, useEffect } from "react";
 import MaterialTable from "material-table";
+import './css/MTableHeader.css';
 
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
@@ -18,9 +19,10 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import { MDBBadge} from 'mdb-react-ui-kit';
 import Header from './testContent/Header'
+import Modal from 'react-modal';
+
   
-const [isPhotoView, setIsPhotoView] = useState(false);
-const [Photo, setPhoto] = useState(false);
+
 
 
 const tableIcons = {
@@ -53,6 +55,10 @@ const App = () => {
     // Function to be called on page load
     myFunction();
   }, []);
+
+  const [isPhotoView, setIsPhotoView] = React.useState(false);
+  const [Photo, setPhoto] = useState('./images/Wallpaper.jpg');
+
   const myFunction = () => {
     // Perform actions or logic on page load
     try {
@@ -65,10 +71,10 @@ const App = () => {
             }).then(response => {
               if (response.ok) {
                 
-                console.log('success');
+                //console.log('success');
                 
                 response.json().then(respData => {
-                  console.log(respData);
+                  //console.log(respData);
                   console.log(JSON.stringify(respData));
                   //console.log(respData.firstName);
                   setData(respData);
@@ -97,21 +103,46 @@ const App = () => {
     { title: "Nationality", field: "profile.nationality.nationality1"},
     { title: "Photos",  render: (rowData) =>
     rowData && (
-      <button onClick={openPhotoModal} style={{border : 'none', backgroundColor: 'white', color:'blue', textDecorationLine:'underline' }}>View</button>
+      <button onClick={() => {openPhotoModal(rowData.photo.photo1)}} style={{border : 'none', backgroundColor: 'white', color:'blue', textDecorationLine:'underline' }}>View</button>
     )
-  },
-    { title: "WarrantStatus", field: ""}
+  }
   ];
-
 
   const [data, setData] = useState([]);
 
-  const openPhotoModal = () => {
+  const openPhotoModal = (data) => {
+    //setPhoto("../ProjectsRepository/Images/" + data);
+    setPhoto(() => {
+      const modifiedValue = "../Images/" + data;
+      console.log(modifiedValue);
+      return modifiedValue;
+  });
     setIsPhotoView(true);
+    console.log("Photo" + Photo);
+
+    console.log("Photo" + Photo);
+
   }
 
+  const closePhotoModal = () => {
+    setIsPhotoView(false);
+  }
+
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      position: 'absolute',
+      width: '60%'
+      },
+  };
+
   return (
-    <>
+    <div>
       <Header/>
       <MaterialTable
         title="Targets"
@@ -153,7 +184,21 @@ const App = () => {
         }}
       />
       
-    </>
+      <Modal
+        isOpen={isPhotoView}
+        onRequestClose={closePhotoModal}
+        contentLabel="Example Modal"
+        ariaHideApp={false}
+        style={customStyles}
+      >
+        <h2>Image:</h2>
+        <img style={{position:'relativeTimeRounding', width:'700px', height:'500px'}} src={require("./images/Wallpaper.jpg")}></img>
+        <button style={{marginTop:'5px',display: 'inline', float:'right'}} onClick={closePhotoModal}>close</button>
+
+      </Modal>
+  );
+    </div>
+
   );
 };
 

@@ -19,6 +19,8 @@ import ViewColumn from "@material-ui/icons/ViewColumn";
 import FrontCircleArrow from './FrontCircleArrow'
 import ActionMenu from "./ActionMenu";
 import moment from "moment";
+import './css/MTableHeader.css';
+
 
   
 
@@ -204,6 +206,7 @@ const Profiles = () => {
       }).then(response => {
         if (response.ok) {
           //console.log('success', response);
+          window.location.replace("/Menu")
         }
         else {
           console.log(response);
@@ -286,7 +289,6 @@ const Profiles = () => {
       { title: "Nationality", field: "nationality.nationalityId", filterPlaceholder: "Nationality", lookup:objNationalities},
       { title: "Family Status", field: "familyStatus.familyStatusId", filterPlaceholder: "Family Status", lookup:objFamilyStatus},
       { title: "Count of warrants", field: "countOfWarrants",filterPlaceholder: "Count of warrants" ,editable: 'never'},
-      { title: "Warrant status", render: rowData => rowData.countOfWarrants > 0 ?"Wanted": "Nothing",filterPlaceholder: "Warrant status" },
       { title: "", render: (rowData) =>
       // rowData && (
         // <FrontCircleArrow profileId = {rowData.profileId}/>
@@ -323,7 +325,6 @@ const Profiles = () => {
                 }                
                 //console.log(JSON.stringify(newProfile));
                 addProfile(newProfile);
-                getProfilesDTO();
                 resolve();
               }, 1000);
             }),
