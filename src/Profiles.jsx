@@ -43,7 +43,7 @@ const tableIcons = {
   ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
   Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
   SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+  //: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
@@ -72,19 +72,18 @@ const Profiles = () => {
             }).then(response => {
               if (response.ok) {
                 
-                console.log('success');
+                //console.log('success');
                 
                 response.json().then(respData => {
-                  console.log(respData);
-                  console.log(JSON.stringify(respData));
+                  //console.log(respData);
+                  //console.log("get profiles: " + JSON.stringify(respData));
                   setProfiles(respData);
                      
                 });
-              
               }
               else {
-                console.log('failure getting profile');
-                console.log(response);
+                //console.log('failure getting profile');
+                //console.log(response);
               }
             });
             
@@ -105,11 +104,11 @@ const Profiles = () => {
             }).then(response => {
               if (response.ok) {
                 
-                console.log('success');
+                //console.log('success');
                 
                 response.json().then(respData => {
-                  console.log(respData);
-                  console.log(JSON.stringify(respData));
+                  //console.log(respData);
+                  //console.log(JSON.stringify(respData));
                   setGenders(respData);
                      
                 });
@@ -138,11 +137,11 @@ const Profiles = () => {
             }).then(response => {
               if (response.ok) {
                 
-                console.log('success');
+                //console.log('success');
                 
                 response.json().then(respData => {
-                  console.log(respData);
-                  console.log(JSON.stringify(respData));
+                  //console.log(respData);
+                  //console.log(JSON.stringify(respData));
                   setNationalities(respData);
                      
                 });
@@ -171,11 +170,11 @@ const Profiles = () => {
             }).then(response => {
               if (response.ok) {
                 
-                console.log('success');
+                //console.log('success');
                 
                 response.json().then(respData => {
-                  console.log(respData);
-                  console.log(JSON.stringify(respData));
+                  //console.log(respData);
+                  //console.log(JSON.stringify(respData));
                   setFamilyStatus(respData);
                      
                 });
@@ -204,7 +203,7 @@ const Profiles = () => {
         body: JSON.stringify(data)
       }).then(response => {
         if (response.ok) {
-          console.log('success', response);
+          //console.log('success', response);
         }
         else {
           console.log(response);
@@ -227,7 +226,7 @@ const Profiles = () => {
         body: JSON.stringify(data)
       }).then(response => {
         if (response.ok) {
-          console.log('success', response);
+          //console.log('success', response);
         }
         else {
           console.log(response);
@@ -250,7 +249,7 @@ const Profiles = () => {
         body: JSON.stringify(data)
       }).then(response => {
         if (response.ok) {
-          console.log('success', response);
+          //console.log('success', response);
         }
         else {
           console.log(response);
@@ -291,7 +290,7 @@ const Profiles = () => {
       { title: "", render: (rowData) =>
       // rowData && (
         // <FrontCircleArrow profileId = {rowData.profileId}/>
-        <ActionMenu />
+        <ActionMenu data = {rowData.profileId} />
       //)
     }
     ];
@@ -322,31 +321,39 @@ const Profiles = () => {
                   nationalityId: parseInt(newData.nationality.nationalityId),
                   familyStatusId: parseInt(newData.familyStatus.familyStatusId)
                 }                
-                console.log(JSON.stringify(newProfile));
+                //console.log(JSON.stringify(newProfile));
                 addProfile(newProfile);
                 getProfilesDTO();
                 resolve();
               }, 1000);
             }),
-          onRowUpdate: (newData) =>
+          onRowUpdate: (newData, oldData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
-                console.log(JSON.stringify(newData));                
-                // const dataUpdate = [...profiles];
-                // const index = oldData.tableData.id;
-                // dataUpdate[index] = newData;
-                // setProfiles([...dataUpdate]);
+                const dataUpdate = [...profiles];
+                const index = oldData.tableData.id;
+                dataUpdate[index] = newData;
+                setProfiles([...dataUpdate]);
+                
+                //console.log("updateprofile data: " + JSON.stringify(newData));                
+                //setProfiles([...dataUpdate]);
                 updateProfile(newData);
-                getProfilesDTO();
+                setProfiles(dataUpdate);
+                //getProfilesDTO();
                 resolve();
               }, 1000);
             }),
           onRowDelete: (oldData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
-                console.log(JSON.stringify(oldData));
+                //console.log(JSON.stringify(oldData));
+                const profileDelete = [...profiles];
+                const index = oldData.tableData.id;
+                profileDelete.splice(index, 1);
+                
                 deleteProfile(oldData);
-                getProfilesDTO();
+                setProfiles([...profileDelete]);
+                //getProfilesDTO();
 
                 resolve();
               }, 1000);
