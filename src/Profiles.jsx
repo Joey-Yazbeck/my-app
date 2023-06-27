@@ -51,16 +51,17 @@ const tableIcons = {
 
 const Profiles = () => {
   const [profiles, setProfiles] = useState([]);
-  
   const [nationalities, setNationalities] = useState([]); 
   const [genders, setGenders] = useState([]); 
   const [familyStatus, setFamilyStatus] = useState([]); 
+  const [targetStatus, setTargetStatus] = useState([]); 
   useEffect(() => {
     // Function to be called on page load
     getProfilesDTO();
     getNationalities();
     getGenders(); 
-    getFamilyStatus();    
+    getFamilyStatus();
+    getTargetStatus();    
   }, []);
   const getProfilesDTO = () => {
     // Perform actions or logic on page load
@@ -84,8 +85,8 @@ const Profiles = () => {
                 });
               }
               else {
-                //console.log('failure getting profile');
-                //console.log(response);
+                console.log('failure getting profile');
+                console.log(response);
               }
             });
             
@@ -150,7 +151,7 @@ const Profiles = () => {
               
               }
               else {
-                console.log('failure getting genders');
+                console.log('failure getting nationalities');
                 console.log(response);
               }
             });
@@ -176,14 +177,47 @@ const Profiles = () => {
                 
                 response.json().then(respData => {
                   //console.log(respData);
-                  //console.log(JSON.stringify(respData));
+                  console.log(JSON.stringify(respData));
                   setFamilyStatus(respData);
                      
                 });
               
               }
               else {
-                console.log('failure getting genders');
+                console.log('failure getting family status');
+                console.log(response);
+              }
+            });
+            
+          } catch (err) {
+            console.log(err);
+          }
+         
+  };
+  const getTargetStatus = () => {
+    // Perform actions or logic on page load
+    try {
+            
+            const res =  fetch("http://localhost:7199/api/TargetStatus", {
+              method: "GET",
+              headers: {
+                      'Accept': 'application/json',
+                  },
+            }).then(response => {
+              if (response.ok) {
+                
+                //console.log('success');
+                
+                response.json().then(respData => {
+                  //console.log(respData);
+                  //console.log(JSON.stringify(respData));
+                  setTargetStatus(respData);
+                     
+                });
+              
+              }
+              else {
+                console.log('failure getting target status');
                 console.log(response);
               }
             });
@@ -280,6 +314,10 @@ const Profiles = () => {
       acc[cur.familyStatusId] = cur.familyStatus1;  
       return acc;
     }, {});
+    var objTargetStatus =  targetStatus.reduce(function(acc, cur) {
+      acc[cur.targetStatusId] = cur.targetStatus1;  
+      return acc;
+    }, {});
    
     const columns = [
       { title: "Full name", field: "fullName" , filterPlaceholder: "name"},
@@ -289,6 +327,7 @@ const Profiles = () => {
       { title: "Nationality", field: "nationality.nationalityId", filterPlaceholder: "Nationality", lookup:objNationalities},
       { title: "Family Status", field: "familyStatus.familyStatusId", filterPlaceholder: "Family Status", lookup:objFamilyStatus},
       { title: "Count of warrants", field: "countOfWarrants",filterPlaceholder: "Count of warrants" ,editable: 'never'},
+      { title: "Target Status", field: "targetStatus.targetStatusId" ,filterPlaceholder: "Target status", lookup:objTargetStatus ,editable: 'never'},
       { title: "", render: (rowData) =>
       // rowData && (
         // <FrontCircleArrow profileId = {rowData.profileId}/>
@@ -327,7 +366,9 @@ const Profiles = () => {
                 addProfile(newProfile);
                 resolve();
               }, 1000);
-            }),
+            }).then(() => {
+              getProfilesDTO();
+           }),
           onRowUpdate: (newData, oldData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
@@ -336,7 +377,7 @@ const Profiles = () => {
                 dataUpdate[index] = newData;
                 setProfiles([...dataUpdate]);
                 
-                //console.log("updateprofile data: " + JSON.stringify(newData));                
+                console.log("updateprofile data: " + JSON.stringify(newData));                
                 //setProfiles([...dataUpdate]);
                 updateProfile(newData);
                 setProfiles(dataUpdate);

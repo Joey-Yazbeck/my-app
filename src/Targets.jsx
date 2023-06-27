@@ -51,13 +51,13 @@ const tableIcons = {
 };
 
 const App = () => {
+  const [isPhotoView, setIsPhotoView] = React.useState(false);
+  const [photo, setPhoto] =useState("./images/joey.jpg");
+
   useEffect(() => {
     // Function to be called on page load
     myFunction();
   }, []);
-
-  const [isPhotoView, setIsPhotoView] = React.useState(false);
-  const [Photo, setPhoto] = useState('./images/Wallpaper.jpg');
 
   const myFunction = () => {
     // Perform actions or logic on page load
@@ -103,30 +103,38 @@ const App = () => {
     { title: "Nationality", field: "profile.nationality.nationality1"},
     { title: "Photos",  render: (rowData) =>
     rowData && (
-      <button onClick={() => {openPhotoModal(rowData.photo.photo1)}} style={{border : 'none', backgroundColor: 'white', color:'blue', textDecorationLine:'underline' }}>View</button>
+      <button onClick={() => openPhotoModal(rowData.photo.photo1)} style={{border : 'none', backgroundColor: 'white', color:'blue', textDecorationLine:'underline' }}>View</button>
     )
   }
   ];
 
   const [data, setData] = useState([]);
-
-  const openPhotoModal = (data) => {
-    //setPhoto("../ProjectsRepository/Images/" + data);
-    setPhoto(() => {
-      const modifiedValue = "../Images/" + data;
-      console.log(modifiedValue);
-      return modifiedValue;
-  });
+  const openPhotoModal =  (data) => {
+    console.log("Photo", data);
+  
+    const photoModule = require('./images/' + data);
+    setPhoto(photoModule);
     setIsPhotoView(true);
-    console.log("Photo" + Photo);
+  
+    console.log("Photo", photo);
+  };
+  // const openPhotoModal = async (data) => {
+  //   console.log("Photo", data);
+  //   console.log("Photo", './images/' + {data})
 
-    console.log("Photo" + Photo);
-
-  }
+  //   const photoModule = await import('./images/${data}');
+  //   setPhoto(photoModule.default);
+  //   setIsPhotoView(true);
+    
+  //   // setPhoto( "./images/" + data);
+  //   // setIsPhotoView(true);
+  //   console.log("Photo", photo);
+  // };
+  
 
   const closePhotoModal = () => {
     setIsPhotoView(false);
-  }
+  };
 
   const customStyles = {
     content: {
@@ -140,7 +148,54 @@ const App = () => {
       width: '60%'
       },
   };
+  const deleteTarget = (data) => {
+    try {
 
+      const res =  fetch("http://localhost:7199/api/Target/" + data.targetId , {
+        method: "Delete",
+        headers: {
+                'Accept': 'application/json',
+                'Content-Type':'application/json'
+            },
+        body: JSON.stringify(data)
+      }).then(response => {
+        if (response.ok) {
+          //console.log('success', response);
+        }
+        else {
+          console.log(response);
+        }
+      });
+      
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const updateTarget = (data) => {
+    console.log(JSON.stringify(data));
+    try {
+
+      const res =  fetch("http://localhost:7199/api/Target", {
+        method: "PUT",
+        headers: {
+                'Accept': 'application/json',
+                'Content-Type':'application/json'
+            },
+        body: JSON.stringify(data)
+      }).then(response => {
+        if (response.ok) {
+          //console.log('success', response);
+        }
+        else {
+          console.log(JSON.stringify(response.body));
+        }
+      });
+      
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
   return (
     <div>
       <Header/>
@@ -150,20 +205,13 @@ const App = () => {
         columns={columns}
         data={data}
         editable={{
-          onRowAdd: (newData) =>
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                setData([...data, newData]);
-
-                resolve();
-              }, 1000);
-            }),
           onRowUpdate: (newData, oldData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
                 const dataUpdate = [...data];
                 const index = oldData.tableData.id;
                 dataUpdate[index] = newData;
+                updateTarget(newData);
                 setData([...dataUpdate]);
 
                 resolve();
@@ -175,6 +223,7 @@ const App = () => {
                 const dataDelete = [...data];
                 const index = oldData.tableData.id;
                 dataDelete.splice(index, 1);
+                deleteTarget(oldData)
                 setData([...dataDelete]);
 
                 resolve();
@@ -192,7 +241,7 @@ const App = () => {
         style={customStyles}
       >
         <h2>Image:</h2>
-        <img style={{position:'relativeTimeRounding', width:'700px', height:'500px'}} src={require("./images/Wallpaper.jpg")}></img>
+        <img style={{position:'relativeTimeRounding', width:'700px', height:'500px'}} src={photo}></img>
         <button style={{marginTop:'5px',display: 'inline', float:'right'}} onClick={closePhotoModal}>close</button>
 
       </Modal>
