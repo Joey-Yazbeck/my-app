@@ -12,13 +12,12 @@ import Edit from "@material-ui/icons/Edit";
 import FilterList from "@material-ui/icons/FilterList";
 import FirstPage from "@material-ui/icons/FirstPage";
 import LastPage from "@material-ui/icons/LastPage";
-import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import FrontCircleArrow from './FrontCircleArrow'
-import ActionMenu from "./ActionMenu";
+import ActionMenuProfile from "./ActionMenuProfiles";
 import moment from "moment";
+import Header from './Header'
 import './css/MTableHeader.css';
 
 
@@ -240,7 +239,8 @@ const Profiles = () => {
       }).then(response => {
         if (response.ok) {
           //console.log('success', response);
-          window.location.replace("/Menu")
+          //window.location.replace("/Menu")
+          getProfilesDTO();
         }
         else {
           console.log(response);
@@ -263,7 +263,8 @@ const Profiles = () => {
         body: JSON.stringify(data)
       }).then(response => {
         if (response.ok) {
-          //console.log('success', response);
+          console.log('success', response);
+          getProfilesDTO();
         }
         else {
           console.log(response);
@@ -286,7 +287,8 @@ const Profiles = () => {
         body: JSON.stringify(data)
       }).then(response => {
         if (response.ok) {
-          //console.log('success', response);
+          getProfilesDTO();
+          console.log('success', response);
         }
         else {
           console.log(response);
@@ -330,8 +332,7 @@ const Profiles = () => {
       { title: "Target Status", field: "targetStatus.targetStatusId" ,filterPlaceholder: "Target status", lookup:objTargetStatus ,editable: 'never'},
       { title: "", render: (rowData) =>
       // rowData && (
-        // <FrontCircleArrow profileId = {rowData.profileId}/>
-        <ActionMenu data = {rowData.profileId} />
+        <ActionMenuProfile data = {rowData.profileId} />
       //)
     }
     ];
@@ -339,14 +340,11 @@ const Profiles = () => {
 
   return (
     <>
-      
+      <Header isProfilePage={true} isTargetPage={false} isSuspectPage={false} isKeywordsPage={false} />
       <MaterialTable
         title="Profiles"
         icons={tableIcons}
         columns={columns}
-        // components={{
-        //   Action: (props) => <ActionMenu />
-        // }}
         data={profiles}
         options={{exportButton:true, filtering:true}}
         editable={{
@@ -364,24 +362,19 @@ const Profiles = () => {
                 }                
                 //console.log(JSON.stringify(newProfile));
                 addProfile(newProfile);
+                // setProfiles([...profiles, newData]);
                 resolve();
               }, 1000);
-            }).then(() => {
-              getProfilesDTO();
-           }),
+            }),
           onRowUpdate: (newData, oldData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
-                const dataUpdate = [...profiles];
-                const index = oldData.tableData.id;
-                dataUpdate[index] = newData;
-                setProfiles([...dataUpdate]);
-                
-                console.log("updateprofile data: " + JSON.stringify(newData));                
-                //setProfiles([...dataUpdate]);
+                // const dataUpdate = [...profiles];
+                // const index = oldData.tableData.id;
+                // dataUpdate[index] = newData;
                 updateProfile(newData);
-                setProfiles(dataUpdate);
-                //getProfilesDTO();
+                // setProfiles([...dataUpdate]);
+
                 resolve();
               }, 1000);
             }),
@@ -389,13 +382,12 @@ const Profiles = () => {
             new Promise((resolve, reject) => {
               setTimeout(() => {
                 //console.log(JSON.stringify(oldData));
-                const profileDelete = [...profiles];
-                const index = oldData.tableData.id;
-                profileDelete.splice(index, 1);
+                // const profileDelete = [...profiles];
+                // const index = oldData.tableData.id;
+                // profileDelete.splice(index, 1);
                 
                 deleteProfile(oldData);
-                setProfiles([...profileDelete]);
-                //getProfilesDTO();
+                // setProfiles([...profileDelete]);
 
                 resolve();
               }, 1000);

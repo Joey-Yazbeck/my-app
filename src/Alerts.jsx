@@ -1,5 +1,6 @@
 import React, { useState, forwardRef, useEffect } from "react";
 import MaterialTable from "material-table";
+import './css/MTableHeader.css';
 
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
@@ -18,7 +19,11 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import { MDBBadge} from 'mdb-react-ui-kit';
 import Header from './Header'
+import Modal from 'react-modal';
+
   
+
+
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -45,16 +50,18 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const Keyword = () => {
+const Alert = () => {
+
   useEffect(() => {
     // Function to be called on page load
-    getKeywords();
+    myFunction();
   }, []);
-  const getKeywords = () => {
+
+  const myFunction = () => {
     // Perform actions or logic on page load
     try {
             
-            const res =  fetch("http://localhost:7199/api/Keyword", {
+            const res =  fetch("http://localhost:7199/api/Alert", {
               method: "GET",
               headers: {
                       'Accept': 'application/json',
@@ -62,13 +69,13 @@ const Keyword = () => {
             }).then(response => {
               if (response.ok) {
                 
-                console.log('success');
+                //console.log('success');
                 
                 response.json().then(respData => {
-                  console.log(respData);
+                  //console.log(respData);
                   console.log(JSON.stringify(respData));
                   //console.log(respData.firstName);
-                  setKeywords(respData);
+                  setData(respData);
                      
                 });
               
@@ -87,27 +94,32 @@ const Keyword = () => {
 
 
   const columns = [
-    { title: "Keywords", field: "keyword1" },
-    
+    { title: "FullName", field: "fullName" },
+    { title: "Message", field: "message" },
+    { title: "Date Generated", field: "dateGenerated"},
+    { render: (rowData) =>
+    rowData && !rowData.isRead && (
+      <button onClick={() => markAlertToBeMonitored(rowData.alertId)} style={{border : 'none', backgroundColor: 'white', color:'blue', textDecorationLine:'underline' }}>Monitor</button>
+    )
+  }
   ];
 
+  const [data, setData] = useState([]);
 
-  const [keywords, setKeywords] = useState([]);
-  const addKeyword = (data) => {
+  const markAlertToBeMonitored = (alertId) => {
+    console.log("alertId", alertId);
     try {
 
-      const res =  fetch("http://localhost:7199/api/Keyword", {
-        method: "POST",
+      const res =  fetch("http://localhost:7199/api/Alert/Monitor/" + alertId, {
+        method: "PUT",
         headers: {
                 'Accept': 'application/json',
                 'Content-Type':'application/json'
-            },
-        body: JSON.stringify(data)
+            }
       }).then(response => {
         if (response.ok) {
           //console.log('success', response);
-          //window.location.replace("/Menu")
-          getKeywords();
+          window.location.replace("/Alerts")
         }
         else {
           console.log(response);
@@ -119,62 +131,22 @@ const Keyword = () => {
     }
   };
   
-  const deleteKeyword = (data) => {
-    try {
-
-      const res =  fetch("http://localhost:7199/api/Keyword/" + data.keywordId , {
-        method: "Delete",
-        headers: {
-                'Accept': 'application/json',
-                'Content-Type':'application/json'
-            },
-        body: JSON.stringify(data)
-      }).then(response => {
-        if (response.ok) {
-          getKeywords();
-          console.log('success', response);
-        }
-        else {
-          console.log(response);
-        }
-      });
-      
-    } catch (err) {
-      console.log(err);
-    }
-  };
   return (
-    <>
-        <Header isProfilePage={false} isTargetPage={false} isSuspectPage={false} isKeywordsPage={true} />      
-        <MaterialTable
-        title="Keywords"
+    <div>
+      <Header/>
+      <MaterialTable
+        title="Targets"
         icons={tableIcons}
         columns={columns}
-        data={keywords}
+        data={data}
         editable={{
-          onRowAdd: (newData) =>
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                addKeyword(newData);
-
-
-                resolve();
-              }, 1000);
-            }),          
-          onRowDelete: (oldData) =>
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                deleteKeyword(oldData);
-
-                resolve();
-              }, 1000);
-            }),
-            
         }}
       />
       
-    </>
+  );
+    </div>
+
   );
 };
 
-export default Keyword;
+export default Alert;

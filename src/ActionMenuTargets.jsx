@@ -9,7 +9,7 @@ import 'react-table-6/react-table.css';
 
 
 
-export default function ActionMenu({ data }) {
+export default function ActionMenuTarget({ data }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [addModalIsOpen, setIsOpen] = React.useState(false);
   const [viewWarrantModelIsOpen, setViewWarrantModelIsOpen] = React.useState(false);
@@ -33,61 +33,9 @@ export default function ActionMenu({ data }) {
     setAnchorEl(null);
   }
 
-  const addToTargetClick = () => {
-    inputRef.current.click();
-  };
-
-  const handleFileChange = event => {
-    const fileObj = event.target.files && event.target.files[0];
-    if (!fileObj) {
-      return;
-    }
-
-    const reader = new FileReader();
-    const byteImage = reader.readAsArrayBuffer(fileObj);
-
-    reader.onloadend = () => {
-      console.log("reader.result ", reader.result);
-      const byteArray = new Uint8Array(reader.result);
-      console.log("reader.result ", byteArray);
-
-      const base64String = btoa(String.fromCharCode.apply(null, byteArray));
-
-      const apiData ={
-        profileId: data,
-        photo: base64String
-      };
-
-      sendToApi(apiData);
-      
-    };
-
-    const sendToApi = (apiData) => {
-      try {
-
-        const res =  fetch("http://localhost:7199/api/Target/AddTarget", {
-          method: "POST",
-          headers: {
-                  'Accept': 'application/json',
-                  'Content-Type':'application/json'
-              },
-          body: JSON.stringify(apiData)
-        }).then(response => {
-          if (response.ok) {
-            console.log('success', response);
-          }
-          else {
-            console.log(response);
-          }
-        });
-        
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    
-  };
   
+
+
   const openAddModal = () => {
     console.log("openAddModal")
     setIsOpen(true);
@@ -160,7 +108,7 @@ export default function ActionMenu({ data }) {
           if (response.ok) {
             console.log('success', response);
             closeAddModal();
-            window.location.replace("/Menu")
+            window.location.replace("/Targets")
           }
           else {
             console.log("error: " + JSON.stringify(response));
@@ -186,19 +134,6 @@ export default function ActionMenu({ data }) {
     },
   };
 
-  function JsonDataDisplay(){
-    const DisplayData=warrants.map(
-        (w)=>{
-            return(
-                <tr>
-                    <td>{w.id}</td>
-                    <td>{w.name}</td>
-                    <td>{w.city}</td>
-                </tr>
-            )
-        }
-    )
-  }
 
   return (
     <div>
@@ -228,10 +163,7 @@ export default function ActionMenu({ data }) {
         <MenuItem key="2" onClick={ViewWarrants}>
           View Warrants
         </MenuItem>
-
-        <MenuItem key="3" onClick={addToTargetClick}>
-          Add to Target
-        </MenuItem>
+        
       </Menu>
       
       <Modal
@@ -254,13 +186,6 @@ export default function ActionMenu({ data }) {
         <button style={{marginTop:'5px',display: 'inline', float:'right'}} onClick={closeAddModal}>close</button>
 
       </Modal>
-
-        <input
-          style={{display: 'none'}}
-          ref={inputRef}
-          type="file"
-          onChange={handleFileChange}
-        />
 
       <Modal
         isOpen={viewWarrantModelIsOpen}

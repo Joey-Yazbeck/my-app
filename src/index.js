@@ -8,15 +8,14 @@ import Target from './testContent/Target';
 import reportWebVitals from './builtIn/reportWebVitals';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SignUp from './SignUp';
-import Menu from './testContent/Menu';
-import Header from './testContent/Header';
-import Search from './testContent/Search';
-import App from './Targets';
+import Header from './Header';
+import Error from './Error';
+import Targets from './Targets';
 import DataTable from './testContent/Table2';
 import Profiles from './Profiles';
-import { BsFillArrowRightCircleFill } from "react-icons/fa";
 import Suspects from './Suspects';
 import Keyword from './Keywords';
+import Alert from './Alerts'
 
 
 
@@ -28,12 +27,13 @@ root.render(
     <Routes>      
       <Route path="/"  element={<Login />}  />
       <Route path="/SignUp"  element={<SignUp />}  />
-      <Route path="/Targets"  element={<App />}/>
+      <Route path="/Targets"  element={<Targets />}/>
       <Route path="/Profiles"  element={<Profiles />}/>
       <Route path="/Suspects"  element={<Suspects />}/>
+      <Route path="/Alerts"  element={<Alert />}/>
+      <Route path="/Error"  element={<Error />}/>
       {/* test content */}
       <Route path="/Target"  element={<Target />}/>
-      <Route path="/Menu"  element={<Menu />}/>
       <Route path="/Header"  element={<Header />}/>
       <Route path="/Table2"  element={<DataTable />}/>
       <Route path="/Keyword"  element={<Keyword />}/>

@@ -50,12 +50,12 @@ function Login() {
             //setOutput(respData.email);
 
           });
-          navigate('/Menu');
+          navigate('/Profiles');
           
         }
         else {
           //change to popup error alert
-          navigate('/SignUp');
+          navigate('/Error');
           console.log('failure');
           console.log(response);
         }

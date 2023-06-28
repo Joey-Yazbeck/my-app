@@ -7,7 +7,7 @@ import {
   MDBBtn,
   MDBCheckbox
 } from 'mdb-react-ui-kit';
-import Header from './testContent/Header'
+import Header from './Header'
 
 export default function App() {
   const [formValue, setFormValue] = useState({

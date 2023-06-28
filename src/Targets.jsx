@@ -17,9 +17,9 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import { MDBBadge} from 'mdb-react-ui-kit';
-import Header from './testContent/Header'
+import Header from './Header'
 import Modal from 'react-modal';
+import ActionMenuTarget from "./ActionMenuTargets";
 
   
 
@@ -50,16 +50,22 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const App = () => {
+const Targets = () => {
   const [isPhotoView, setIsPhotoView] = React.useState(false);
   const [photo, setPhoto] =useState("./images/joey.jpg");
-
+  const [data, setData] = useState([]);
+  const [nationalities, setNationalities] = useState([]); 
+  const [genders, setGenders] = useState([]); 
+  const [familyStatus, setFamilyStatus] = useState([]); 
   useEffect(() => {
     // Function to be called on page load
-    myFunction();
+    getTargetsDTO();
+    getNationalities();
+    getGenders(); 
+    getFamilyStatus();
   }, []);
 
-  const myFunction = () => {
+  const getTargetsDTO = () => {
     // Perform actions or logic on page load
     try {
             
@@ -93,22 +99,137 @@ const App = () => {
           }
          
   };
-
-
+  const getGenders = () => {
+    // Perform actions or logic on page load
+    try {
+            
+            const res =  fetch("http://localhost:7199/api/Gender", {
+              method: "GET",
+              headers: {
+                      'Accept': 'application/json',
+                  },
+            }).then(response => {
+              if (response.ok) {
+                
+                //console.log('success');
+                
+                response.json().then(respData => {
+                  //console.log(respData);
+                  //console.log(JSON.stringify(respData));
+                  setGenders(respData);
+                     
+                });
+              
+              }
+              else {
+                console.log('failure getting genders');
+                console.log(response);
+              }
+            });
+            
+          } catch (err) {
+            console.log(err);
+          }
+         
+  };
+  const getNationalities = () => {
+    // Perform actions or logic on page load
+    try {
+            
+            const res =  fetch("http://localhost:7199/api/Nationality", {
+              method: "GET",
+              headers: {
+                      'Accept': 'application/json',
+                  },
+            }).then(response => {
+              if (response.ok) {
+                
+                //console.log('success');
+                
+                response.json().then(respData => {
+                  //console.log(respData);
+                  //console.log(JSON.stringify(respData));
+                  setNationalities(respData);
+                     
+                });
+              
+              }
+              else {
+                console.log('failure getting nationalities');
+                console.log(response);
+              }
+            });
+            
+          } catch (err) {
+            console.log(err);
+          }
+         
+  };
+  const getFamilyStatus = () => {
+    // Perform actions or logic on page load
+    try {
+            
+            const res =  fetch("http://localhost:7199/api/FamilyStatus", {
+              method: "GET",
+              headers: {
+                      'Accept': 'application/json',
+                  },
+            }).then(response => {
+              if (response.ok) {
+                
+                //console.log('success');
+                
+                response.json().then(respData => {
+                  //console.log(respData);
+                  console.log(JSON.stringify(respData));
+                  setFamilyStatus(respData);
+                     
+                });
+              
+              }
+              else {
+                console.log('failure getting family status');
+                console.log(response);
+              }
+            });
+            
+          } catch (err) {
+            console.log(err);
+          }
+         
+  };
+  var objNationalities = nationalities.reduce(function(acc, cur) {
+    acc[cur.nationalityId] = cur.nationality1;  
+    return acc;
+  }, {});
+  var objGenders =  genders.reduce(function(acc, cur) {
+    acc[cur.genderId] = cur.gender1;  
+    return acc;
+  }, {});
+  var objFamilyStatus =  familyStatus.reduce(function(acc, cur) {
+    acc[cur.familyStatusId] = cur.familyStatus1;  
+    return acc;
+  }, {});
   const columns = [
-    { title: "FullName", field: "profile.fullName" },
-    { title: "MotherName", field: "profile.motherName"},
-    { title: "DateOfBirth", field: "profile.dateOfBirth"},
-    { title: "Gender", field: "profile.gender.gender1"},
-    { title: "Nationality", field: "profile.nationality.nationality1"},
-    { title: "Photos",  render: (rowData) =>
+    { title: "Full name", field: "profile.fullName" , filterPlaceholder: "name"},
+    { title: "Mother name", field: "profile.motherName",  filterPlaceholder: "mother name"},
+    { title: "Date of birth", field: "profile.dateOfBirth",  filterPlaceholder: "DOB",type: "date"},
+    { title: "Gender", field: "profile.gender.genderId",  filterPlaceholder: "Gender", lookup:objGenders},
+    { title: "Nationality", field: "profile.nationality.nationalityId", filterPlaceholder: "Nationality", lookup:objNationalities},
+    { title: "Family Status", field: "profile.familyStatus.familyStatusId", filterPlaceholder: "Family Status", lookup:objFamilyStatus},
+    { title: "Count of warrants", field: "profile.countOfWarrants",filterPlaceholder: "Count of warrants" ,editable: 'never'},
+    { title: "Photo",  render: (rowData) =>
     rowData && (
-      <button onClick={() => openPhotoModal(rowData.photo.photo1)} style={{border : 'none', backgroundColor: 'white', color:'blue', textDecorationLine:'underline' }}>View</button>
-    )
+      <button onClick={() => openPhotoModal(rowData.photo.photo1)} style={{border : 'none', backgroundColor: 'white', color:'blue', textDecorationLine:'underline' }}>{rowData.photo.photo1}</button>
+    ),editable: 'never'},
+    { title: "", render: (rowData) =>
+    // rowData && (
+      <ActionMenuTarget data = {rowData} />
+    //)
   }
   ];
 
-  const [data, setData] = useState([]);
+  
   const openPhotoModal =  (data) => {
     console.log("Photo", data);
   
@@ -160,7 +281,8 @@ const App = () => {
         body: JSON.stringify(data)
       }).then(response => {
         if (response.ok) {
-          //console.log('success', response);
+          console.log('success', response);
+          getTargetsDTO();
         }
         else {
           console.log(response);
@@ -184,7 +306,9 @@ const App = () => {
         body: JSON.stringify(data)
       }).then(response => {
         if (response.ok) {
-          //console.log('success', response);
+
+          console.log('success', response);
+          getTargetsDTO();
         }
         else {
           console.log(JSON.stringify(response.body));
@@ -198,21 +322,22 @@ const App = () => {
   
   return (
     <div>
-      <Header/>
+      <Header isProfilePage={false} isTargetPage={true} isSuspectPage={false} isKeywordsPage={false} />
       <MaterialTable
         title="Targets"
         icons={tableIcons}
         columns={columns}
         data={data}
+        options={{exportButton:true, filtering:true}}
         editable={{
           onRowUpdate: (newData, oldData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
-                const dataUpdate = [...data];
-                const index = oldData.tableData.id;
-                dataUpdate[index] = newData;
+                // const dataUpdate = [...data];
+                // const index = oldData.tableData.id;
+                // dataUpdate[index] = newData;
                 updateTarget(newData);
-                setData([...dataUpdate]);
+                // setData([...dataUpdate]);
 
                 resolve();
               }, 1000);
@@ -220,11 +345,11 @@ const App = () => {
           onRowDelete: (oldData) =>
             new Promise((resolve, reject) => {
               setTimeout(() => {
-                const dataDelete = [...data];
-                const index = oldData.tableData.id;
-                dataDelete.splice(index, 1);
+                // const dataDelete = [...data];
+                // const index = oldData.tableData.id;
+                // dataDelete.splice(index, 1);
                 deleteTarget(oldData)
-                setData([...dataDelete]);
+                // setData([...dataDelete]);
 
                 resolve();
               }, 1000);
@@ -251,4 +376,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Targets;
